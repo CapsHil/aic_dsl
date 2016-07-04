@@ -87,7 +87,9 @@ public class AicdslGenerator implements IGenerator2 {
         this.testCounter++;
       }
     }
-    fsa.generateFile("Testing.java", "/home/zenika/Desktop/", ((this.header + this.body) + this.footer));
+    String _property = System.getProperty("user.dir");
+    String _plus_12 = (_property + "/DslFiles/");
+    fsa.generateFile("Testing.java", _plus_12, ((this.header + this.body) + this.footer));
   }
   
   @Override

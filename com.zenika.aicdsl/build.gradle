@@ -29,12 +29,12 @@ task generateXtextLanguage(type: JavaExec) {
 	args += "rootPath=/${projectDir}/.."
 }
 
-task(runSimple, dependsOn: 'classes', type: JavaExec) {
+task(generateJavaFile, dependsOn: 'classes', type: JavaExec) {
 	main = 'com.zenika.Generate'
 	classpath = sourceSets.main.runtimeClasspath
 }
 
-defaultTasks 'runSimple'
+defaultTasks 'generateJavaFile'
 
 generateXtext.dependsOn(generateXtextLanguage)
 clean.dependsOn(cleanGenerateXtextLanguage)

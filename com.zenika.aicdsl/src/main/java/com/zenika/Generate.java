@@ -29,37 +29,36 @@ public class Generate {
 		XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
 
 		// load a resource by URI, in this case from the file system
-		URI uri = null;
 		try {
-			uri = URI.createFileURI("/home/zenika/Workspace/com.zenika.aicdsl.parent/com.zenika.aicdsl/src/main/java/com/zenika/test.aic");
+			//uri = URI.createFileURI("/home/zenika/Workspace/com.zenika.aicdsl.parent/com.zenika.aicdsl/src/main/java/com/zenika/test.aic");
+			URI uri = URI.createFileURI(System.getProperty("user.dir")+"/DslFiles/test.aic");
+			Resource resource = resourceSet.getResource(uri, true);
+			
+			// Validator
+			IResourceValidator validator = ((XtextResource)resource).getResourceServiceProvider().getResourceValidator();
+			List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
+			for (Issue issue : issues) {
+			  System.out.println(issue.getMessage());
+			}
+			
+			// Generator
+			AicdslGenerator generator = new AicdslGenerator();
+			InMemoryFileSystemAccess fsa = new InMemoryFileSystemAccess();
+			generator.doGenerate(resource, fsa);
+			for (Entry<String, CharSequence> file : fsa.getTextFiles().entrySet()) {
+				  //System.out.println("Generated file contents : "+file.getValue());
+				  try {
+					BufferedWriter finalFile = new BufferedWriter(new FileWriter(System.getProperty("user.dir")+"/DslFiles/Testing.java"));
+					finalFile.write((String) file.getValue());
+					finalFile.close();
+				  } catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				  
+			}
 		} catch (Exception e) {
 			System.out.println(e);
-		}
-		Resource resource = resourceSet.getResource(uri, true);
-		
-		// Validator
-		IResourceValidator validator = ((XtextResource)resource).getResourceServiceProvider().getResourceValidator();
-		List<Issue> issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl);
-		for (Issue issue : issues) {
-		  System.out.println(issue.getMessage());
-		}
-		
-		// Generator
-		AicdslGenerator generator = new AicdslGenerator();
-		InMemoryFileSystemAccess fsa = new InMemoryFileSystemAccess();
-		generator.doGenerate(resource, fsa);
-		for (Entry<String, CharSequence> file : fsa.getTextFiles().entrySet()) {
-			 // System.out.println("Generated file path : "+file.getKey());
-			  System.out.println("Generated file contents : "+file.getValue());
-			  try {
-				BufferedWriter finalFile = new BufferedWriter(new FileWriter("/home/zenika/Desktop/Testing.java"));
-				finalFile.write((String) file.getValue());
-				finalFile.close();
-			  } catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			  
 		}
 	}
 }

@@ -1,6 +1,6 @@
 Feature: "Best feature ever"
    Scenario: "Best scenario ever"
-      Set sensor TYPE_LIGHT at 82
+      Set sensor TYPE_LIGHT at 42
       Take a screenshot
    End
 

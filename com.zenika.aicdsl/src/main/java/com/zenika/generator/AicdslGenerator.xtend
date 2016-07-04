@@ -84,7 +84,7 @@ public class Testing extends InstrumentationTestCase {
 "				testCounter++
 			}
 		}
-		fsa.generateFile('Testing.java', "/home/zenika/Desktop/", header + body + footer);
+		fsa.generateFile('Testing.java', System.getProperty("user.dir")+"/DslFiles/", header + body + footer);
 	}
 	
 	override afterGenerate(Resource input, IFileSystemAccess2 fsa, IGeneratorContext context) {
